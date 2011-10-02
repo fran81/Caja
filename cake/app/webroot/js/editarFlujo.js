@@ -1,0 +1,3 @@
+function editarFlujo(id) {
+	
+}
