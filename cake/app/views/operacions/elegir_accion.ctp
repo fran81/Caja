@@ -6,8 +6,7 @@
 	} else if ($style == "Efectivo" || $style == "Cheque" || $style == "Puente") {
 		echo $this->Form->hidden('Flujo.tipo', array('value' => 'E'));
 	}
-	echo $this->Html->script(array('calcula.cotizacion'),array('inline' => false));
-	
+
 ?>
 <?php if ($style == "Aporte") { ?>
 	<div id="movimiento">
@@ -15,7 +14,7 @@
 		echo $this->Form->input('Movimiento.nro_boleta');
 		echo $this->Form->input('Movimiento.importe');
 		echo $this->Form->input('Movimiento.concepto');
-		echo $this->Form->button('cargar', array('onclick' => 'guardarMovimiento()'));
+		echo $this->Form->button('cargar', array('id' => 'guardar-movimiento','class'=>'boton'));
 		echo $this->Form->hidden('Movimiento.tipo', array('value' => 'Aporte')); ?>
 	</div>
 <?php } else if ($style == "Cuota") { ?>
@@ -26,7 +25,7 @@
 		<div id="labelCotizacion"></div>
 		<?php echo $this->Form->input('importe',array('name'=> 'data[Movimiento][importe]'));
 		echo $this->Form->input('Movimiento.concepto');
-		echo $this->Form->button('cargar', array('onclick' => 'guardarMovimiento()'));
+		echo $this->Form->button('cargar', array('id' => 'guardar-movimiento','class'=>'boton'));
 		echo $this->Form->hidden('Movimiento.tipo', array('value' => $style)); ?>
 	</div>
 <?php } else if ($style == "Vario") { ?>
@@ -34,7 +33,7 @@
 		<?php echo $this->Form->input('Movimiento.nro_boleta');
 		echo $this->Form->input('Movimiento.importe');
 		echo $this->Form->input('Movimiento.concepto');
-		echo $this->Form->button('cargar', array('onclick' => 'guardarMovimiento()'));
+		echo $this->Form->button('cargar', array('id' => 'guardar-movimiento','class'=>'boton'));
 		echo $this->Form->hidden('Movimiento.tipo', array('value' => $style)); ?>
 	</div>
 <?php } else if ($style == "Sellado") {?>
@@ -44,7 +43,7 @@
 		echo $this->Form->input('Movimiento.nro_boleta');
 		echo $this->Form->input('Movimiento.importe');
 		echo $this->Form->input('Movimiento.concepto');
-		echo $this->Form->button('cargar', array('onclick' => 'guardarSellado()', 'id' => 'Guardar'));
+		echo $this->Form->button('cargar', array('id' => 'guardar-sellado','class'=>'boton'));
 		echo $this->Form->hidden('Movimiento.tipo', array('value' => 'Sellado'));?>
 	</div>
 <?php }  else if ($style == "Efectivo") {?>
@@ -53,7 +52,7 @@
 		<div id="panelCotizacion"></div>
 		<div id="labelCotizacion"></div>
 		<?php echo $this->Form->input('importe', array('name'=>'data[Efectivo][importe]'));
-		echo $this->Form->button('cargar', array('type' => 'Efectivo', 'onclick' => 'guardarEfectivo()')); ?>
+		echo $this->Form->button('cargar', array('type' => 'Efectivo', 'id' => 'guardar-efectivo()','class'=>'boton')); ?>
 	</div>
 <?php } else if ($style == "no_pesos") {?>
 	<div id="no_pesos">
@@ -73,9 +72,9 @@
 		echo $this->Form->input('Cheque.fecha_cobro', array('type' => 'text', 'class' => 'Fecha'));
 		echo $this->Form->radio('Cheque.tipo',
 	array('corriente'=>'Corriente','diferido'=>'Diferido','canje'=>'Para Canje'),
-	array('value'=>'corriente'));
+	array('value'=>'corriente','class'=>'boton'));
 		echo $this->Form->input('Cheque.fecha_limite', array('type' => 'text', 'class' => 'Fecha', 'disabled' => true));
-		echo $this->Form->button('cargar', array('onclick' => 'guardarCheque()', 'id' => 'Guardar','disabled' => true)); ?>
+		echo $this->Form->button('cargar', array('id' => 'guardar-cheque','disabled' => true,'class'=>'boton')); ?>
 	</div>
 <?php } else if ($style == "Puente") {?>
 	<div id="puente">
@@ -83,7 +82,7 @@
 		echo $this->Form->input('CuentaPuente.concepto');
 		echo $this->Form->input('CuentaPuente.importe');
 		echo $this->Form->input('CuentaPuente.fecha', array('type' => 'text', 'class' => 'Fecha'));
-		echo $this->Form->button('cargar', array('onclick' => 'guardarPuente()', 'id' => 'Guardar','disabled' => true)); ?>
+		echo $this->Form->button('cargar', array('id' => 'guardar-puente','disabled' => true,'class'=>'boton')); ?>
 	</div>
 <?php } else if ($style == "Operaciones") {?>
 	<div id="operaciones">

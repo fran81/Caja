@@ -6,6 +6,12 @@ $(function() {
 			'/cake/operacions/elegirAccion #content',
 			{style: panel},
 			function() { 
+				$('.boton').button();
+				$('#guardar-movimiento').click(function (){guardarMovimiento()});
+				$('#guardar-sellado').click(function (){guardarSellado()});
+				$('#guardar-efectivo').click(function (){guardarEfectivo()});
+				$('#guardar-cheque').click(function (){guardarCheque()});
+				$('#guardar-puente').click(function (){guardarPuente()});
 				$('.Fecha').datepicker({
 						navigationAsDateFormat:true,
 						showOtherMonths:true,

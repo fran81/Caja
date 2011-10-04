@@ -20,7 +20,7 @@
 	$this->Js->buffer("$('#crearOperacion').click(function (){crear()})");
 	$this->Js->buffer("$('#TerminarOperacion').live('click',function(){finalizarOperacion()});");
 	$this->Js->buffer("$('#CancelarOperacion').live('click',function(){cancelarOperacion()});");
-	$this->Js->buffer("$('#auto_responsable').autocomplete({minLength:'2',source:'../responsables/buscar'});");
+	$this->Js->buffer("$('#auto_responsable').autocomplete({autoFill:true,minLength:'1',source:'../responsables/buscar'});");
 	$this->Js->buffer("$('.boton').button();");
 ?>
 
