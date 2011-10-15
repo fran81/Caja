@@ -1,99 +1,52 @@
 <?php
 	echo $this->Html->script(array(
-		'jquery/development-bundle/ui/jquery.ui.core',
-		'jquery.ui.datepicker',
-	), array('inline' => false));
-	$cambio = "$('#Operacion').submit(function(){ return false; } );";
-	$cambio2 = "$('#OperacionAccion').change(function(){
-//			$('[value='']',this).remove();
-			$('#acciones > div:visible').hide('puff');
-			$('#acciones > div:input').attr('disabled',true);
-			$('#acciones div.' + $(this).val()).show('slide');
-			$('#acciones div.' + $(this).val() +' :input').attr('disabled',false);});";
-	$datepicker = "$('#OperacionFechaCobro').datepicker();";
-	$this->Js->Buffer($cambio);
-	$this->Js->Buffer($cambio2);
+		'jquery/development-bundle/ui/jquery.ui.widget',
+		'jquery/development-bundle/ui/jquery.ui.position',
+		'jquery/development-bundle/ui/jquery.ui.datepicker',
+		'jquery/development-bundle/ui/jquery.ui.autocomplete',
+		'jquery/development-bundle/ui/jquery.ui.button',
+		'panelAcciones',		
+		'aver',
+		'guardar.movimiento',
+		'inicio.operacion',
+		'busca.cotizacion',
+		'calcula.cotizacion',
+		'check.dato',
+		'totalizar.operacion'
+	),
+	array('inline' => false));
+	$datepicker = "$('.Fecha').datepicker({navigationAsDateFormat:true, showOtherMonths:true, buttonImage:'calendar.png', showAnim:'fadeIn', buttonText:'calendario', dateFormat:'dd-mm-yy', duration:'normal'});";
 	$this->Js->buffer($datepicker);
+	$this->Js->buffer("$('#crearOperacion').click(function (){crear()})");
+	$this->Js->buffer("$('#TerminarOperacion').live('click',function(){finalizarOperacion()});");
+	$this->Js->buffer("$('#CancelarOperacion').live('click',function(){cancelarOperacion()});");
+	$this->Js->buffer("$('#auto_responsable').autocomplete({autoFill:true,minLength:'1',source:'../responsables/buscar'});");
+	$this->Js->buffer("$('.boton').button();");
 ?>
 
 <div class="operacions form">
-<?php echo $this->Form->create('Operacion');?>
+<?php echo $this->Form->create('Operacion', array('default' => false));?>
 	<fieldset>
-		<legend><?php __('Add Operacion'); ?></legend>
-		<?php echo $this->Form->input('responsable_id');?>
-		<?php echo $this->Form->input('user_id');?>
+		<legend><?php __('Cargar Operacion'); ?></legend>
+		<?php echo $this->Form->input('responsable_id', array('class' => 'OperacionResponsableId', 'id' => 'auto_responsable', 'type' => 'text'));?>
+		<?php echo $this->Form->hidden('user_id', array('class' => 'OperacionResponsableId','value'=>'4e0f2d5c-7400-4cc7-9ce0-05e07f56b65b'));?>
 		<?php echo $this->Form->select("caja_id", $listcaja);?>
+		<?php echo $this->Form->button("Crear", array('id' => 'crearOperacion', 'class' => 'crearOperacion', 'class' => 'boton', 'type' => 'Movimiento'));?>
+		<?php echo $this->Form->hidden('id', array('id' => 'id'));?>
 		<?php echo $this->Form->select('Accion', 
-			array('aporte' => 'Movimiento - Aportes',
-				'cuota' => 'Movimiento - Cuota de Préstamo',
-				'vario' => 'Movimiento - Ingreso Vario',
-				'efectivo' => 'Flujo de caja - Efectivo',
-				'cheque' => 'Flujo de caja - Cheque',
-				'puente' => 'Flujo de caja - Cuenta Puente'
-			)
+			array('Aporte' => 'Movimiento - Aportes',
+				'Cuota' => 'Movimiento - Cuota de Préstamo',
+				'Sellado' => 'Movimiento - Sellado',
+				'Vario' => 'Movimiento - Ingreso Vario',
+				'Efectivo' => 'Flujo de caja - Efectivo',
+				'Cheque' => 'Flujo de caja - Cheque',
+				'Puente' => 'Flujo de caja - Cuenta Puente'				
+			),null,array('class' => 'selectAccion','id' => 'Accion')
 		)?>
-
-
-		<div class="acciones" id="acciones">
-			<div class="aporte">
-				<?php echo $this->Form->input('barra', array('type' => 'text'));
-					echo $this->Form->input('nro_boleta_aporte');
-					echo $this->Form->input('importe_aporte');
-					echo $this->Form->input('concepto_aporte')?>
-			</div>
-	
-			<div class="cuota">
-				<?php echo $this->Form->input('nro_boleta_cuota');
-					echo $this->Form->input('importe_cuota');
-					echo $this->Form->input('concepto_cuota');?>
-			</div>
-	
-			<div class="vario">
-				<?php echo $this->Form->input('nro_boleta_vario');
-					echo $this->Form->input('importe_vario');
-					echo $this->Form->input('concepto_vario');?>
-			</div>
-
-			<div class="efectivo">
-				<table cellpadding="0" cellspacing="0">
-				<tr>
-					<th><?php echo $this->Paginator->sort('nombre');?></th>
-					<th><?php echo $this->Paginator->sort('importe');?></th>
-				</tr>
-				<?php
-				$i = 0;
-				Debugger::dump($cotizacions);
-				foreach ($cotizacions as $cotizacion):
-					$class = null;
-					if ($i++ % 2 == 0) {
-					$class = ' class="altrow"';
-					}
-				Debugger::dump($cotizacion);
-				?>
-				<tr<?php echo $class;?>>
-				<td>
-				<?php echo $this->Html->link($cotizacion[0]['Moneda']['nombre'], array('controller' => 'monedas', 'action' => 'view', $cotizacion['Moneda']['id'])); ?>
-				</td>
-				<td><?php echo $cotizacion['importe']; ?>&nbsp;</td>
-				</tr>
-				<?php endforeach; ?>
-				</table>
-			</div>
-		
-			<div class="cheque">
-				<?php echo $this->Form->input('numero');
-				echo $this->Form->input('importe');
-				echo $this->Form->radio('tipo',array(
-					'corriente'=>'Corriente',
-					'diferido'=>'Diferido',
-					'canje'=>'Para Canje'),
-					array('value'=>'corriente'));
-				echo $this->Form->input('fecha_cobro');
-//				echo $this->Form->input('responsable_id');
-				echo $this->Form->select("plaza_id", $listdata);?>
-			</div>	
-		</div>
-		<?php echo $this->Form->end(__('Crear', true));?>
+		<div id="panelAccion" class="panel"></div>
+		<div id="totalOperacion" class="oculto"></div>
+		<div id="descuentoVuelto" class="oculto"></div>
+		<?php echo $this->Form->button("Cancelar", array('id'=> 'CancelarOperacion','class'=>'boton'));?>
 	</fieldset>
 </div>
-<?php echo $this->element('acordion_acciones'); ?>	
+<?php echo $this->element('acordion_acciones'); ?>
